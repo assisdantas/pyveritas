@@ -4,11 +4,18 @@ from flask import request, jsonify
 from flask_httpauth import HTTPTokenAuth 
 from config import GetEnvData
 from db.database import CreateConnection
+import secrets
+import hashlib
 
 env_data = GetEnvData()
 SECRET_KEY = env_data['SECRET_KEY']
 
 auth = HTTPTokenAuth(scheme='Bearer')
+
+def GenerateNodeId():
+    words = ' '.join(secrets.choice(WORDS_LIST) for _ in range(12))
+    node_id = hashlib.sha256(words.encode()).hexdigest()
+    return node_id, words
 
 def RegisterUser(username, password):
     connection = CreateConnection()

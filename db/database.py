@@ -1,14 +1,24 @@
 import psycopg2
 from app.block import Block
 from config import GetEnvData
+from pymongo import MongoClient
+from config import GetEnvData
 
 env_data = GetEnvData()
+client = MongoClient(env_data['MONGO_URI'])
+db = client[env_data['MONGO_DB_NAME']]
 
 DB_NAME = env_data['DB_NAME']
 DB_USER = env_data['DB_USER']
 DB_PASSWORD = env_data['DB_PASSWORD']
 DB_HOST = env_data['DB_HOST']
 DB_PORT = env_data['DB_PORT']
+
+def SaveBlockToDB(block):
+    db.blocks.insert_one(block.ToDict())
+
+def LoadBlockchain():
+    return [Block.FromDict(b) for b in db.blocks.find()]
 
 def CreateConnection():
     connection = psycopg2.connect(

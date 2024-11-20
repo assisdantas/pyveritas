@@ -11,6 +11,8 @@ requests = "*"
 psycopg2-binary = "*"
 python-dotenv = "*"
 bcrypt = "*"
+pymongo = "*"
+flask-admin = "*"
 
 [dev-packages]
 
